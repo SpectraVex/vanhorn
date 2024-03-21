@@ -4,7 +4,14 @@
 *
 ********************************************************************************************/
 
-#include "include/raylib.h"
+// Core Dependencies
+#include <stdio.h>
+
+// External Dependencies
+#include <raylib.h>
+
+// Project
+#include "vanhorn/core/vhcore.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -13,12 +20,20 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 640;
+    const int screenHeight = 480;
 
-    InitWindow(screenWidth, screenHeight, "VanhornGame");
+    const int x = func();
 
-    //SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    printf("%i\n", x);
+
+    InitWindow(screenWidth, screenHeight, "Vanhorn - Build v1.0");
+    InitAudioDevice();
+
+    Music music = LoadMusicStream("D:/Studio/Games/vanhorn/res/snd/amb_loop_00.wav"); 
+    PlayMusicStream(music);
+
+    SetTargetFPS(244);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -26,20 +41,23 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        UpdateMusicStream(music);
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("Welcome to Vanhorn...", 190, 200, 20, LIGHTGRAY);
+            ClearBackground(BLACK);
+            DrawText("Welcome to Vanhorn...", 210, 210, 20, DARKGRAY);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
 
+    UnloadMusicStream(music);
+
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    CloseAudioDevice();
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
