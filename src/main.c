@@ -1,50 +1,55 @@
-/*******************************************************************************************
-*
-* Vanhorn - A minimal 3D horror brawler written purely in C99 using raylib.
-*
-********************************************************************************************/
+/*****************************************************************************************************************
+* Vanhorn - A minimal native 3D horror brawler written purely in C99 using raylib, designed to be fast and simple.
+******************************************************************************************************************/
 
-// Core Dependencies
+// Core dependencies
 #include <stdio.h>
 
-// External Dependencies
+// External dependencies
 #include <raylib.h>
 
-// Project
+// Vanhorn headers
 #include "vanhorn/core/vhcore.h"
 
 //------------------------------------------------------------------------------------
-// Program main entry point
+// Main entry point
 //------------------------------------------------------------------------------------
-int main(void)
-{
-    // Initialization
+int main(void) {
+    // Core Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 640;
     const int screenHeight = 480;
 
-    const int x = func();
-
-    printf("%i\n", x);
-
     InitWindow(screenWidth, screenHeight, "Vanhorn - Build v1.0");
     InitAudioDevice();
+    //--------------------------------------------------------------------------------------
 
+    // Resource Initialization
+    //--------------------------------------------------------------------------------------
     Music music = LoadMusicStream("D:/Studio/Games/vanhorn/res/snd/amb_loop_00.wav"); 
     PlayMusicStream(music);
 
-    SetTargetFPS(244);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(244);
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Update
+    while (!WindowShouldClose()) {
+        // Update input
+        //----------------------------------------------------------------------------------
+        //UpdateInput();
+        //----------------------------------------------------------------------------------
+
+        // Update game
+        //----------------------------------------------------------------------------------
+        //UpdateGame();
+        //----------------------------------------------------------------------------------
+
+        // Update audio 
         //----------------------------------------------------------------------------------
         UpdateMusicStream(music);
         //----------------------------------------------------------------------------------
 
-        // Draw
+        // Update rendering
         //----------------------------------------------------------------------------------
         BeginDrawing();
             ClearBackground(BLACK);
@@ -53,12 +58,16 @@ int main(void)
         //----------------------------------------------------------------------------------
     }
 
-    UnloadMusicStream(music);
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    //UnloadResources();
+    UnloadMusicStream(music);
+
+    // Core De-Initialization
+    //--------------------------------------------------------------------------------------
     CloseAudioDevice();
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow();
     //--------------------------------------------------------------------------------------
 
     return 0;
