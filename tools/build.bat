@@ -10,10 +10,10 @@ if "%~1"=="logless" (
 
 :: --- Directories ---
 set "PROJECT_ROOT=D:\Studio\Games\vanhorn\"
-set "SRC_DIR=%PROJECT_ROOT%src"
-set "OUT_DIR=%PROJECT_ROOT%bin"
-set "INCLUDE_DIR=%SRC_DIR%\include"
-set "LIB_DIR=%SRC_DIR%\lib"
+set "SRC_DIR=%PROJECT_ROOT%src\"
+set "OUT_DIR=%PROJECT_ROOT%bin\"
+set "INCLUDE_DIR=%SRC_DIR%include"
+set "LIB_DIR=%SRC_DIR%lib"
 
 :: Ensure output directory exists
 if not exist "%OUT_DIR%" mkdir "%OUT_DIR%"
