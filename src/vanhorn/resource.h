@@ -1,6 +1,12 @@
 #pragma once
 
 #include "common.h"
-#include "scene.h"
 
-void LoadResources(struct Scene* scene);
+typedef struct Resources {
+	unsigned int num_of_models;
+	Model models[MAX_MODELS];
+} Resources;
+
+Resources* GetResources();
+void LoadResources();
+void UnloadResources();

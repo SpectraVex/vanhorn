@@ -1,10 +1,29 @@
 #include "resource.h"
 
-void LoadResources(Scene* scene) {
-	if(scene) {
-		scene->models[0] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/old_couch.glb"); 	
-		scene->models[1] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/deadbodies.glb"); 	
-		scene->models[2] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/crate.glb"); 	
-    	scene->music_tracks[0] = LoadMusicStream("D:/Studio/Games/vanhorn/res/snd/amb_loop_00.wav"); 
+// Singleton resource manager, heap allocated struct of typedef Resources.
+Resources* GetResources() {
+    static Resources* instance;
+    if (instance == NULL) {
+        instance = (Resources*)calloc(1, sizeof(Resources));
+    }
+    return instance;
+}
+
+void LoadResources() {
+	Resources* instance = GetResources();
+	if (instance) {
+		if (instance->num_of_models < MAX_OBJECTS) {
+			instance->models[instance->num_of_models] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/old_couch.glb"); 	
+			instance->num_of_models++;
+		}
+	}
+}
+
+void UnloadResources() {
+	Resources* instance = GetResources();
+	if (instance) {
+		for(unsigned int i = 0; i < instance->num_of_models; i++) {
+			UnloadModel(instance->models[i]);
+		}
 	}
 }
