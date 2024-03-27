@@ -1,7 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "scene.h"
+
+struct Level;
 
 typedef struct Object {
     unsigned int id;
@@ -9,7 +10,7 @@ typedef struct Object {
 	Model model;
 } Object;
 
-void AddObject(Scene* scene, const Transform transform, const Model model, const unsigned int array_index);
+void AddObject(const Transform transform, const unsigned int model_index);
 
-void UpdateObject(Object* object);
-void RenderObject(Object* object);
+void UpdateObject(struct Object* object);
+void RenderObject(struct Object* object);

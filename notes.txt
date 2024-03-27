@@ -1,4 +1,4 @@
-scene
+level
 	resources
 		models
 		textures
@@ -15,7 +15,7 @@ scene
 
 ***
 
-scene.update()
+level.update()
 	for each object
 		update object
 
@@ -26,3 +26,7 @@ BETWEEN LEVEL LOADING, WE CAN THEN DO DEALLOCATIONS OF RESOURCES AND DESTROYING 
 FIXED-SIZED RESOURCE DESIGN SYSTEM WIDE FOR THIS GAME.
 GLOBAL STATIC STACK-ONLY RESOURCES ON BOOT.
 I THINK THIS METHOD IS CALLED OBJECT POOLING.
+
+// Look into global static stack-allocated memory blocks for the entire application! No heap allocation, that way we can fit the entire app into a block of contiguous memory.
+
+DrawModel(GetModelResource(0), (Vector3) {0,0,0}, 1, WHITE);
