@@ -12,12 +12,16 @@ Resources* GetResources() {
 }
 
 void LoadResources() {
+	GetResources();
 	if(instance) {
 		if(instance->num_of_models < MAX_OBJECTS) {
 			instance->models[instance->num_of_models] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/stalker/stalker_low.glb");
 			instance->num_of_models++;
 
-			instance->models[instance->num_of_models] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/male_character_ps1-style.glb");
+			instance->models[instance->num_of_models] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/crate.glb");
+			instance->num_of_models++;
+
+			instance->models[instance->num_of_models] = LoadModel("D:/Studio/Games/vanhorn/res/tmp/worn_bandages.glb");
 			instance->num_of_models++;
 
 			TraceLog(LOG_INFO, "VANHORN: All resources loaded.");

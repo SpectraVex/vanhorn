@@ -1,6 +1,7 @@
 /***************************************************************************************************************************
 * Vanhorn - A minimal native 3D horror brawler written purely in C99 using raylib, designed to be fast, simple and portable.
 ****************************************************************************************************************************/
+#define RAYGUI_IMPLEMENTATION
 
 // Vanhorn Includes
 #include "vanhorn/common.h"
@@ -26,17 +27,6 @@ const RenderTexture LoadScaledRenderTarget(const float Percentage) {
     return target;
 }
 
-Camera3D InitCamera() {
-    Camera3D camera = {};
-    camera.position = (Vector3){ 7.0f, 5.0f, 0.0f };    // Camera position
-    camera.target = (Vector3){ 0.0f, 3.0f, 0.0f };      // Camera looking at point
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-    camera.fovy = 70.0f;                                // Camera field-of-view Y
-    camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
-
-    return camera;
-}
-
 int main(void) {
     // Init window.
     InitWindow(WINDOWWIDTH, WINDOWHEIGHT, "Vanhorn - Build v1.0");
@@ -44,48 +34,71 @@ int main(void) {
     Image icon = LoadImage("D:/Studio/Games/vanhorn/res/tex/icon_cube.png");
     SetWindowIcon(icon);
     HideCursor();
-    //SetTargetFPS(144);
+    SetTargetFPS(144);
     InitAudioDevice();
 
     SetMousePosition(GetScreenWidth()*.5f,GetScreenHeight()*.5f);
-    Camera3D camera = InitCamera();
     RenderTexture rt = LoadScaledRenderTarget(RENDER_PERCENTAGE);
+
+    Rectangle windowRect = { 125, 125, 150, 150 };
+    bool dragWindow = false;
+    Vector2 dragOffset = { 0 }; 
 
     // Global resources.
     // For the time being these are essentially everything we'll ever need for the entire game session.
     // Later we can get this to load and unload from a level_#.txt list, or something like that.
-    GetResources();
     LoadResources();
-
+    GetLevel();
+    GetPlayerCamera();
     // AddObject looper for testing spawning multiple objects.
     const Transform world_transform = {(Vector3){0.0, 0.0, 0.0}, (Vector4){0.0, 0.0, 0.0, 1.0}, (Vector3){1.0, 1.0, 1.0}};
-    const unsigned int num = 128;
+    const unsigned int num = 160;
     const float distance = 100.0f;
     for (unsigned int i = 0; i <= num; i++) {
         const float lerpval = (1.0/(float)num)*(float)i;
-        TraceLog(LOG_INFO, "The Percentage Lerp Value: %f", lerpval);
-        const Vector3 pos = Vector3Lerp((Vector3){-distance, 0.0, 0.0}, (Vector3){distance, 0.0, 0.0}, lerpval);
+        const Vector3 pos = Vector3Lerp((Vector3){-distance, 0.0, -4.0}, (Vector3){distance, 0.0, 4.0}, lerpval);
         const Quaternion rot = (Quaternion){0,0,0,1};
-        const Vector3 scale = (Vector3){.1,.1,.1};
+        const Vector3 scale = (Vector3){1,1,1};
         const Transform t = (Transform) {pos, rot, scale};
 
-        AddObject(t, 1);
+        AddObject(t, 0);
     }
+
+    const Vector3 pos = (Vector3){0.0, 0.0, 0.0};
+    const Quaternion rot = (Quaternion){0,0,0,1};
+    const Vector3 scale = (Vector3){1,1,1};
+    const Transform t = (Transform) {pos, rot, scale};
 
     // Main loop.
     while (!WindowShouldClose()) {
-        UpdateCamera(&camera, 4);
-        SetMousePosition(GetScreenWidth()*.5f,GetScreenHeight()*.5f); 
-
         UpdateLevel();
 
         //if(IsKeyPressed(KEY_F)) { HideCursor(); ToggleFullscreen(); }
 
-        // Update rendering
+        // Temp GUI test.
+        Vector2 mousePoint = GetMousePosition();
+        // Check if the mouse is over the window title bar (assuming a title bar height of 20 pixels)
+        Rectangle titleBar = { windowRect.x, windowRect.y, windowRect.width, 20 };
+        if (CheckCollisionPointRec(mousePoint, titleBar)) {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                dragWindow = true;
+                dragOffset = (Vector2){ mousePoint.x - windowRect.x, mousePoint.y - windowRect.y };
+            }
+        }
+        if (dragWindow) {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                // Update window position based on mouse movement
+                windowRect.x = mousePoint.x - dragOffset.x;
+                windowRect.y = mousePoint.y - dragOffset.y;
+            } else {
+                dragWindow = false; // Stop dragging when mouse button is released
+            }
+        }
+
         BeginDrawing();
             BeginTextureMode(rt);
                 ClearBackground(BLACK);
-                BeginMode3D(camera);
+                BeginMode3D(*GetPlayerCamera());
                     RenderLevel();
                 EndMode3D();
             EndTextureMode();
@@ -98,6 +111,7 @@ int main(void) {
                 Vector2Zero(),
                 0,
                 DARKGRAY);
+            GuiWindowBox(windowRect, "Tools");
             DrawFPS(5, 5);
         EndDrawing();
     }
