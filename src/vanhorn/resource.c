@@ -46,6 +46,6 @@ Model GetModelResource(const unsigned int index) {
 			}
 		}
 	}
-	Model empty_model = {0};
-	return empty_model;
+	Model null_model = {0};
+	return null_model;
 }

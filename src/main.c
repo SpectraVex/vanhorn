@@ -40,10 +40,6 @@ int main(void) {
     SetMousePosition(GetScreenWidth()*.5f,GetScreenHeight()*.5f);
     RenderTexture rt = LoadScaledRenderTarget(RENDER_PERCENTAGE);
 
-    Rectangle windowRect = { 125, 125, 150, 150 };
-    bool dragWindow = false;
-    Vector2 dragOffset = { 0 }; 
-
     // Global resources.
     // For the time being these are essentially everything we'll ever need for the entire game session.
     // Later we can get this to load and unload from a level_#.txt list, or something like that.
@@ -62,6 +58,7 @@ int main(void) {
         const Transform t = (Transform) {pos, rot, scale};
 
         AddObject(t, 0);
+        AddObject(t, 1);
     }
 
     const Vector3 pos = (Vector3){0.0, 0.0, 0.0};
@@ -73,27 +70,7 @@ int main(void) {
     while (!WindowShouldClose()) {
         UpdateLevel();
 
-        //if(IsKeyPressed(KEY_F)) { HideCursor(); ToggleFullscreen(); }
-
-        // Temp GUI test.
-        Vector2 mousePoint = GetMousePosition();
-        // Check if the mouse is over the window title bar (assuming a title bar height of 20 pixels)
-        Rectangle titleBar = { windowRect.x, windowRect.y, windowRect.width, 20 };
-        if (CheckCollisionPointRec(mousePoint, titleBar)) {
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                dragWindow = true;
-                dragOffset = (Vector2){ mousePoint.x - windowRect.x, mousePoint.y - windowRect.y };
-            }
-        }
-        if (dragWindow) {
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-                // Update window position based on mouse movement
-                windowRect.x = mousePoint.x - dragOffset.x;
-                windowRect.y = mousePoint.y - dragOffset.y;
-            } else {
-                dragWindow = false; // Stop dragging when mouse button is released
-            }
-        }
+        if(IsKeyPressed(KEY_F)) { HideCursor(); ToggleFullscreen(); }
 
         BeginDrawing();
             BeginTextureMode(rt);
@@ -111,7 +88,6 @@ int main(void) {
                 Vector2Zero(),
                 0,
                 DARKGRAY);
-            GuiWindowBox(windowRect, "Tools");
             DrawFPS(5, 5);
         EndDrawing();
     }
