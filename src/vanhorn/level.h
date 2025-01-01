@@ -9,12 +9,14 @@ typedef struct Level {
 	struct Object* objects[MAX_OBJECTS];
 } Level;
 
-Level* GetLevel();
+bool CreateLevel();
+void LoadLevel();
 void UnloadLevel();
+Level* GetLevel();
 Camera3D* GetPlayerCamera();
 
-void EmptyLevel();
-void PopulateLevel();
+bool EmptyLevel();
+//bool PopulateLevel();
 
 void UpdateLevel();
-void RenderLevel();
+void RenderLevel(const bool render_debug_info);

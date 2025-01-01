@@ -9,9 +9,10 @@ typedef struct Resources {
 	Model models[MAX_MODELS];
 } Resources;
 
-Resources* GetResources();
+bool CreateResources();
 void LoadResources();
 void UnloadResources();
+Resources* GetResources();
 
 // Maybe use index as enum?
 Model GetModelResource(const unsigned int index);
